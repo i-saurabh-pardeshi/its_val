@@ -10,7 +10,7 @@
         :root {
             --primary-pink: #ff4d6d;
             --deep-red: #800020;
-            --glass: rgba(255, 255, 255, 0.6);
+            --glass: rgba(255, 255, 255, 0.65);
         }
 
         body, html {
@@ -29,11 +29,7 @@
         }
 
         .slider { display: flex; width: 900%; height: 100%; transition: transform 0.8s cubic-bezier(0.65, 0, 0.35, 1); }
-        section { 
-            width: 100vw; height: 100vh; 
-            display: flex; justify-content: center; align-items: center; 
-            padding: 15px; box-sizing: border-box; 
-        }
+        section { width: 100vw; height: 100vh; display: flex; justify-content: center; align-items: center; padding: 15px; box-sizing: border-box; }
 
         .glass-card {
             background: var(--glass);
@@ -51,37 +47,30 @@
             box-sizing: border-box;
         }
 
-        .scrollable-content {
-            overflow-y: auto;
-            flex-grow: 1;
-            padding-right: 5px;
-            margin-bottom: 10px;
-        }
-
-        .scrollable-content::-webkit-scrollbar { width: 4px; }
-        .scrollable-content::-webkit-scrollbar-thumb { background: var(--primary-pink); border-radius: 10px; }
-
         .story-text { 
             font-size: 1.1rem; line-height: 1.6; color: var(--deep-red); 
             margin-bottom: 20px; min-height: 80px;
+            font-weight: 400;
         }
 
-        .btn-group { 
-            display: flex; justify-content: center; gap: 10px; 
-            flex-wrap: wrap; opacity: 0; transition: opacity 0.5s ease; 
-            pointer-events: none; padding-top: 10px;
+        /* The human cursor */
+        .story-text::after { content: "|"; animation: blink 0.7s infinite; margin-left: 2px; }
+        @keyframes blink { 50% { opacity: 0; } }
+        
+        .shake { animation: shake 0.4s ease-in-out; }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-8px); }
+            75% { transform: translateX(8px); }
         }
+
+        .btn-group { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; opacity: 0; transition: opacity 0.5s ease; pointer-events: none; padding-top: 10px; }
         .show-btns { opacity: 1; pointer-events: auto; }
 
-        button { 
-            padding: 12px 24px; border-radius: 50px; border: none; 
-            cursor: pointer; font-weight: 600; transition: 0.3s;
-            font-size: 0.95rem;
-        }
+        button { padding: 12px 24px; border-radius: 50px; border: none; cursor: pointer; font-weight: 600; transition: 0.3s; font-size: 0.95rem; }
         .nav-btn { background: var(--primary-pink); color: white; box-shadow: 0 4px 12px rgba(255, 77, 109, 0.3); }
         .back-btn { background: rgba(255,255,255,0.7); color: var(--deep-red); }
 
-        label { display: block; text-align: left; color: var(--deep-red); font-weight: 600; margin-top: 15px; font-size: 0.9rem; }
         input, textarea {
             width: 100%; padding: 12px; margin: 8px 0;
             border-radius: 12px; border: 1px solid #ffb7c5;
@@ -92,21 +81,17 @@
         .button-box { position: relative; height: 140px; width: 100%; display: flex; justify-content: center; align-items: center; }
         #yesBtn { background: #2ecc71; color: white; padding: 15px 40px; font-size: 1.2rem; z-index: 10; border-radius: 50px; }
         #noBtn { background: #e74c3c; color: white; padding: 15px 40px; font-size: 1.2rem; position: absolute; transition: all 0.2s ease; border-radius: 50px; }
-
-        @keyframes finalPulse {
-            0% { transform: scale(1); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-            50% { transform: scale(1.05); box-shadow: 0 20px 45px rgba(255, 77, 109, 0.4); }
-            100% { transform: scale(1); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-        }
-
-        @media (min-width: 768px) {
-            .glass-card { padding: 40px; }
-            .story-text { font-size: 1.2rem; }
-        }
+        
+        #music-toggle { position:fixed; bottom:20px; right:20px; z-index:100; cursor:pointer; background:rgba(255,255,255,0.5); padding:10px; border-radius:50%; font-size:20px; }
     </style>
 </head>
 <body>
 
+<audio id="bgMusic" loop>
+    <source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<div id="music-toggle" onclick="toggleMusic()">🔇</div>
 <div id="hearts-container"></div>
 
 <div class="slider" id="slider">
@@ -118,75 +103,22 @@
         </div>
     </section>
 
-    <section>
-        <div class="glass-card">
-            <p class="story-text" data-text="Sometimes I find it hard to say the right words when I'm looking at you. You tend to make me lose my train of thought... in the best way possible."></p>
-            <div class="btn-group">
-                <button class="back-btn" onclick="move(0)">Back</button>
-                <button class="nav-btn" onclick="move(2)">Keep going →</button>
-            </div>
-        </div>
-    </section>
-
-    <section>
-        <div class="glass-card">
-            <h2 style="color: var(--primary-pink);">My Secret...</h2>
-            <p class="story-text" data-text="I smile like an idiot at my phone whenever you text me. My favorite part of every day is simply seeing 'Shiksha' pop up on my screen."></p>
-            <div class="btn-group">
-                <button class="back-btn" onclick="move(1)">Back</button>
-                <button class="nav-btn" onclick="move(3)">Next →</button>
-            </div>
-        </div>
-    </section>
-
-    <section>
-        <div class="glass-card">
-            <h2 style="color: var(--primary-pink);">Looking at you...</h2>
-            <p class="story-text" data-text="The time I see you, Shiksha, I actually forgot how to breathe. But the truth is, my heart still races the exact same way every single time I see you....."></p>
-            <div class="btn-group">
-                <button class="back-btn" onclick="move(2)">Back</button>
-                <button class="nav-btn" onclick="move(4)">And then... →</button>
-            </div>
-        </div>
-    </section>
-
-    <section>
-        <div class="glass-card">
-            <h2 style="color: var(--primary-pink);">Honestly...</h2>
-            <p class="story-text" data-text="I know I am stupid sometimes, Shiksha, but still, this stupid guy loves you like hell. I am sorry for all my mistakes. I promise to always try for us."></p>
-            <div class="btn-group">
-                <button class="back-btn" onclick="move(3)">Back</button>
-                <button class="nav-btn" onclick="move(5)">One more thing →</button>
-            </div>
-        </div>
-    </section>
-
-    <section>
-        <div class="glass-card">
-            <h2 style="color: var(--primary-pink);">Our Vibe</h2>
-            <p class="story-text" data-text="You're the only person I can be 100% my weird self with. With you, everything just feels... right."></p>
-            <div class="btn-group">
-                <button class="back-btn" onclick="move(4)">Back</button>
-                <button class="nav-btn" onclick="move(6)">Your turn... →</button>
-            </div>
-        </div>
-    </section>
+    <section><div class="glass-card"><p class="story-text" data-text="Sometimes I find it hard to say the right words when I'm looking at you..."></p><div class="btn-group"><button class="back-btn" onclick="move(0)">Back</button><button class="nav-btn" onclick="move(2)">Keep going →</button></div></div></section>
+    <section><div class="glass-card"><h2 style="color: var(--primary-pink);">My Secret...</h2><p class="story-text" data-text="I smile like an idiot at my phone whenever you text me."></p><div class="btn-group"><button class="back-btn" onclick="move(1)">Back</button><button class="nav-btn" onclick="move(3)">Next →</button></div></div></section>
+    <section><div class="glass-card"><h2 style="color: var(--primary-pink);">Looking at you...</h2><p class="story-text" data-text="The first time I saw you, Shiksha, I actually forgot how to breathe..."></p><div class="btn-group"><button class="back-btn" onclick="move(2)">Back</button><button class="nav-btn" onclick="move(4)">And then... →</button></div></div></section>
+    <section><div class="glass-card"><h2 style="color: var(--primary-pink);">Honestly...</h2><p class="story-text" data-text="I know I am stupid sometimes, Shiksha, but still, this stupid guy loves you like hell."></p><div class="btn-group"><button class="back-btn" onclick="move(3)">Back</button><button class="nav-btn" onclick="move(5)">One more thing →</button></div></div></section>
+    <section><div class="glass-card"><h2 style="color: var(--primary-pink);">Our Vibe</h2><p class="story-text" data-text="You're the only person I can be 100% my weird self with."></p><div class="btn-group"><button class="back-btn" onclick="move(4)">Back</button><button class="nav-btn" onclick="move(6)">Your turn... →</button></div></div></section>
 
     <section>
         <div class="glass-card">
             <h2 style="color: var(--deep-red); margin-top: 0;">A Heart-to-Heart</h2>
-            <div class="scrollable-content">
+            <div style="overflow-y:auto; flex-grow:1; margin-bottom:10px; padding-right:5px;">
                 <form id="valentineForm" action="https://formspree.io/f/mlglykpk" method="POST">
-                    <label>1. Our best moment together?</label>
-                    <textarea name="best_moment" required></textarea>
-                    <label>2. If 'Us' was a song, what would it be?</label>
-                    <input type="text" name="song" required>
-                    <label>3. The most 'us' thing we do?</label>
-                    <input type="text" name="us_thing" required>
-                    <label>4. Place you want to visit with me?</label>
-                    <input type="text" name="city" required>
-                    <label>5. A secret wish?</label>
-                    <textarea name="secret_wish" required></textarea>
+                    <label>1. Our best moment together?</label><textarea name="best_moment" required></textarea>
+                    <label>2. If 'Us' was a song?</label><input type="text" name="song" required>
+                    <label>3. The most 'us' thing we do?</label><input type="text" name="us_thing" required>
+                    <label>4. Place you want to visit with me?</label><input type="text" name="city" required>
+                    <label>5. A secret wish?</label><textarea name="secret_wish" required></textarea>
                 </form>
             </div>
             <div class="btn-group show-btns" style="opacity: 1; pointer-events: auto;">
@@ -209,26 +141,33 @@
 </div>
 
 <script>
+    const music = document.getElementById('bgMusic');
+    let isPlaying = false;
+
+    function toggleMusic() {
+        const icon = document.getElementById('music-toggle');
+        if (isPlaying) { music.pause(); icon.innerHTML = "🔇"; } 
+        else { music.play(); icon.innerHTML = "🔊"; }
+        isPlaying = !isPlaying;
+    }
+
     function createHeart() {
         const heart = document.createElement('div');
         heart.classList.add('heart');
         heart.innerHTML = ['s❤️', 's💖', 's💝', 's💕'][Math.floor(Math.random()*4)];
         heart.style.left = Math.random() * 100 + 'vw';
         heart.style.fontSize = Math.random() * 20 + 15 + 'px';
-        heart.style.animationDuration = Math.random() * 2 + 5 + 's';
+        heart.style.animationDuration = Math.random() * 2 + 3 + 's';
         document.getElementById('hearts-container').appendChild(heart);
         setTimeout(() => heart.remove(), 5000);
     }
-    setInterval(createHeart, 150);
+    setInterval(createHeart, 200);
 
-    let typeInterval;
     function typeWriter(slideIndex) {
-        clearInterval(typeInterval);
         const sections = document.querySelectorAll('section');
         const activeSection = sections[slideIndex];
         const textElement = activeSection.querySelector('.story-text');
         const btnGroup = activeSection.querySelector('.btn-group') || activeSection.querySelector('.button-box');
-        
         if (!textElement || !textElement.getAttribute('data-text')) return;
 
         const fullText = textElement.getAttribute('data-text');
@@ -236,77 +175,64 @@
         if (btnGroup) btnGroup.classList.remove('show-btns');
 
         let i = 0;
-        typeInterval = setInterval(() => {
+        function type() {
             if (i < fullText.length) {
-                textElement.innerHTML += fullText.charAt(i);
-                i++;
-            } else {
-                clearInterval(typeInterval);
-                if (btnGroup) btnGroup.classList.add('show-btns');
-            }
-        }, 40);
+                // Human hesitation on first slide
+                if (slideIndex === 0 && i === fullText.length - 21) {
+                    setTimeout(() => { i++; type(); }, 800);
+                } else {
+                    textElement.innerHTML += fullText.charAt(i);
+                    i++;
+                    setTimeout(type, Math.random() * 50 + 35);
+                }
+            } else if (btnGroup) { btnGroup.classList.add('show-btns'); }
+        }
+        type();
     }
 
     function move(slideIndex) {
+        if(!isPlaying && slideIndex === 1) toggleMusic();
         document.getElementById('slider').style.transform = `translateX(-${slideIndex * 100}vw)`;
-        setTimeout(() => typeWriter(slideIndex), 600);
+        setTimeout(() => typeWriter(slideIndex), 800);
     }
 
     function validateAndMove() {
         const form = document.getElementById('valentineForm');
         if (form.checkValidity()) move(7);
         else {
-            Swal.fire({ title: 'Shiksha... ❤️', text: 'Please fill out the questions first!', icon: 'info', confirmButtonColor: '#ff4d6d' });
-            form.reportValidity();
+            const card = document.querySelector('.slider section:nth-child(7) .glass-card');
+            card.classList.add('shake');
+            setTimeout(() => card.classList.remove('shake'), 400);
+            Swal.fire({ title: 'Wait...', text: 'I really want to know your answers first!', icon: 'info' });
         }
     }
 
     function moveNo() {
         const noBtn = document.getElementById('noBtn');
         const container = document.getElementById('button-box');
-        const maxX = container.clientWidth - noBtn.clientWidth - 10;
-        const maxY = container.clientHeight - noBtn.clientHeight - 10;
-        noBtn.style.left = Math.floor(Math.random() * maxX) + 'px';
-        noBtn.style.top = Math.floor(Math.random() * maxY) + 'px';
+        noBtn.style.left = Math.floor(Math.random() * (container.clientWidth - 100)) + 'px';
+        noBtn.style.top = Math.floor(Math.random() * (container.clientHeight - 50)) + 'px';
     }
 
     async function celebrate(event) {
-        if(event) event.preventDefault();
         const form = document.getElementById('valentineForm');
         const formData = new FormData(form);
-
-        Swal.fire({
-            title: 'I Knew It! ❤️',
-            text: 'Shiksha, you just made me the happiest guy alive!',
-            icon: 'success',
-            showConfirmButton: false,
-            timer: 3000
-        });
-
         fetch(form.action, { method: 'POST', body: formData, headers: { 'Accept': 'application/json' } });
 
+        Swal.fire({ title: 'YES! ❤️', text: 'I knew it! Happy Valentine\'s, Shiksha!', icon: 'success', showConfirmButton: false, timer: 2000 });
+
         setTimeout(() => {
-            const lastSlide = document.getElementById('ask-slide');
-            lastSlide.innerHTML = `
-                <div class="glass-card" style="animation: finalPulse 2s infinite;">
-                    <h1 style="color: var(--deep-red); font-size: 2.2rem; margin-bottom: 10px;">Yay! ❤️</h1>
-                    <div style="font-size: 3.5rem; margin: 15px 0;">❤️</div>
-                    <p class="story-text" style="min-height: auto;">
-                        See you soon, <b>Shiksha</b>!<br><br>
-                        <span style="font-style: italic; color: var(--primary-pink); font-weight: 600;">Keep calling!</span>
-                    </p>
-                    <div style="font-size: 2rem;">💖💖💖</div>
-                </div>
-            `;
-            // Final burst of hearts
-            for(let i=0; i<15; i++) setTimeout(createHeart, i * 100);
-        }, 2500);
+            document.getElementById('ask-slide').innerHTML = `
+                <div class="glass-card" style="animation: shake 2s infinite;">
+                    <h1 style="color: var(--deep-red);">Yay! ❤️</h1>
+                    <p class="story-text">See you soon, Shiksha! I've received your answers. <br><br><b>Keep calling!</b></p>
+                </div>`;
+        }, 2200);
     }
 
     window.onload = () => {
         typeWriter(0);
-        const noBtn = document.getElementById('noBtn');
-        if(noBtn) { noBtn.style.left = '60%'; noBtn.style.top = '40%'; }
+        document.getElementById('noBtn').style.left = '60%'; 
     }
 </script>
 </body>
