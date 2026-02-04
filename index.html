@@ -28,7 +28,7 @@
             100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
         }
 
-        .slider { display: flex; width: 900%; height: 100%; transition: transform 0.8s cubic-bezier(0.65, 0, 0.35, 1); }
+        .slider { display: flex; width: 1000%; height: 100%; transition: transform 0.8s cubic-bezier(0.65, 0, 0.35, 1); }
         section { width: 100vw; height: 100vh; display: flex; justify-content: center; align-items: center; padding: 15px; box-sizing: border-box; }
 
         .glass-card {
@@ -47,22 +47,9 @@
             box-sizing: border-box;
         }
 
-        .story-text { 
-            font-size: 1.1rem; line-height: 1.6; color: var(--deep-red); 
-            margin-bottom: 20px; min-height: 80px;
-            font-weight: 400;
-        }
-
-        /* The human cursor */
+        .story-text { font-size: 1.1rem; line-height: 1.6; color: var(--deep-red); margin-bottom: 20px; min-height: 80px; }
         .story-text::after { content: "|"; animation: blink 0.7s infinite; margin-left: 2px; }
         @keyframes blink { 50% { opacity: 0; } }
-        
-        .shake { animation: shake 0.4s ease-in-out; }
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-8px); }
-            75% { transform: translateX(8px); }
-        }
 
         .btn-group { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; opacity: 0; transition: opacity 0.5s ease; pointer-events: none; padding-top: 10px; }
         .show-btns { opacity: 1; pointer-events: auto; }
@@ -81,8 +68,6 @@
         .button-box { position: relative; height: 140px; width: 100%; display: flex; justify-content: center; align-items: center; }
         #yesBtn { background: #2ecc71; color: white; padding: 15px 40px; font-size: 1.2rem; z-index: 10; border-radius: 50px; }
         #noBtn { background: #e74c3c; color: white; padding: 15px 40px; font-size: 1.2rem; position: absolute; transition: all 0.2s ease; border-radius: 50px; }
-        
-        #music-toggle { position:fixed; bottom:20px; right:20px; z-index:100; cursor:pointer; background:rgba(255,255,255,0.5); padding:10px; border-radius:50%; font-size:20px; }
     </style>
 </head>
 <body>
@@ -91,39 +76,43 @@
     <source src="music.mp3" type="audio/mpeg">
 </audio>
 
-<div id="music-toggle" onclick="toggleMusic()">🔇</div>
 <div id="hearts-container"></div>
 
+<form id="valentineForm" action="https://formspree.io/f/mlglykpk" method="POST" style="display:none;"></form>
+
 <div class="slider" id="slider">
+    <section><div class="glass-card"><h1 style="color: var(--deep-red);">Hey Shiksha ❤️</h1><p class="story-text" data-text="Before you move forward, I want you to know that this isn't just a website. It's a piece of my heart, coded just for you. And cringy as well...."></p><div class="btn-group"><button class="nav-btn" onclick="move(1)">Next →</button></div></div></section>
+    <section><div class="glass-card"><p class="story-text" data-text="Sometimes I find it hard to say the right words when I'm looking at you. You tend to make me lose my train of thought... in the best way possible."></p><div class="btn-group"><button class="back-btn" onclick="move(0)">Back</button><button class="nav-btn" onclick="move(2)">Keep going →</button></div></div></section>
+    <section><div class="glass-card"><h2 style="color: var(--primary-pink);">My Secret...</h2><p class="story-text" data-text="I smile like an idiot at my phone whenever you text me. My favorite part of every day is simply seeing 'Shiksha' pop up on my screen."></p><div class="btn-group"><button class="back-btn" onclick="move(1)">Back</button><button class="nav-btn" onclick="move(3)">Next →</button></div></div></section>
+    <section><div class="glass-card"><h2 style="color: var(--primary-pink);">Looking at you...</h2><p class="story-text" data-text="The time I see you, Shiksha, I actually forgot how to breathe. But the truth is, my heart still races the exact same way every single time I see you....."></p><div class="btn-group"><button class="back-btn" onclick="move(2)">Back</button><button class="nav-btn" onclick="move(4)">And then... →</button></div></div></section>
+    <section><div class="glass-card"><h2 style="color: var(--primary-pink);">Honestly...</h2><p class="story-text" data-text="I know I am stupid sometimes, Shiksha, but still, this stupid guy loves you like hell. I am sorry for all my mistakes. I promise to always try for us."></p><div class="btn-group"><button class="back-btn" onclick="move(3)">Back</button><button class="nav-btn" onclick="move(5)">One more thing →</button></div></div></section>
+    <section><div class="glass-card"><h2 style="color: var(--primary-pink);">Our Vibe</h2><p class="story-text" data-text="You're the only person I can be 100% my weird self with. With you, everything just feels... right."></p><div class="btn-group"><button class="back-btn" onclick="move(4)">Back</button><button class="nav-btn" onclick="move(6)">Your turn... →</button></div></div></section>
+
     <section>
         <div class="glass-card">
-            <h1 style="color: var(--deep-red);">Hey Shiksha ❤️</h1>
-            <p class="story-text" data-text="Before you move forward, I want you to know that this isn't just a website. It's a piece of my heart, coded just for you. And cringy as well...."></p>
-            <div class="btn-group"><button class="nav-btn" onclick="move(1)">Next →</button></div>
+            <h2 style="color: var(--deep-red);">A Heart-to-Heart (1/2)</h2>
+            <div style="overflow-y:auto; flex-grow:1; margin-bottom:10px;">
+                <label>1. Our best moment together?</label><textarea id="q1" required></textarea>
+                <label>2. If 'Us' was a song, what would it be?</label><input type="text" id="q2" required>
+            </div>
+            <div class="btn-group show-btns">
+                <button type="button" class="back-btn" onclick="move(5)">Back</button>
+                <button type="button" class="nav-btn" onclick="checkPart1()">Next Part →</button>
+            </div>
         </div>
     </section>
 
-    <section><div class="glass-card"><p class="story-text" data-text="Sometimes I find it hard to say the right words when I'm looking at you..."></p><div class="btn-group"><button class="back-btn" onclick="move(0)">Back</button><button class="nav-btn" onclick="move(2)">Keep going →</button></div></div></section>
-    <section><div class="glass-card"><h2 style="color: var(--primary-pink);">My Secret...</h2><p class="story-text" data-text="I smile like an idiot at my phone whenever you text me."></p><div class="btn-group"><button class="back-btn" onclick="move(1)">Back</button><button class="nav-btn" onclick="move(3)">Next →</button></div></div></section>
-    <section><div class="glass-card"><h2 style="color: var(--primary-pink);">Looking at you...</h2><p class="story-text" data-text="The first time I saw you, Shiksha, I actually forgot how to breathe..."></p><div class="btn-group"><button class="back-btn" onclick="move(2)">Back</button><button class="nav-btn" onclick="move(4)">And then... →</button></div></div></section>
-    <section><div class="glass-card"><h2 style="color: var(--primary-pink);">Honestly...</h2><p class="story-text" data-text="I know I am stupid sometimes, Shiksha, but still, this stupid guy loves you like hell."></p><div class="btn-group"><button class="back-btn" onclick="move(3)">Back</button><button class="nav-btn" onclick="move(5)">One more thing →</button></div></div></section>
-    <section><div class="glass-card"><h2 style="color: var(--primary-pink);">Our Vibe</h2><p class="story-text" data-text="You're the only person I can be 100% my weird self with."></p><div class="btn-group"><button class="back-btn" onclick="move(4)">Back</button><button class="nav-btn" onclick="move(6)">Your turn... →</button></div></div></section>
-
     <section>
         <div class="glass-card">
-            <h2 style="color: var(--deep-red); margin-top: 0;">A Heart-to-Heart</h2>
-            <div style="overflow-y:auto; flex-grow:1; margin-bottom:10px; padding-right:5px;">
-                <form id="valentineForm" action="https://formspree.io/f/mlglykpk" method="POST">
-                    <label>1. Our best moment together?</label><textarea name="best_moment" required></textarea>
-                    <label>2. If 'Us' was a song?</label><input type="text" name="song" required>
-                    <label>3. The most 'us' thing we do?</label><input type="text" name="us_thing" required>
-                    <label>4. Place you want to visit with me?</label><input type="text" name="city" required>
-                    <label>5. A secret wish?</label><textarea name="secret_wish" required></textarea>
-                </form>
+            <h2 style="color: var(--deep-red);">A Heart-to-Heart (2/2)</h2>
+            <div style="overflow-y:auto; flex-grow:1; margin-bottom:10px;">
+                <label>3. The most 'us' thing we do?</label><input type="text" id="q3" required>
+                <label>4. place you want to visit me?</label><input type="text" id="q4" required>
+                <label>5. A secret wish?</label><textarea id="q5" required></textarea>
             </div>
-            <div class="btn-group show-btns" style="opacity: 1; pointer-events: auto;">
-                <button type="button" class="back-btn" onclick="move(5)">Back</button>
-                <button type="button" class="nav-btn" onclick="validateAndMove()">Final Step →</button>
+            <div class="btn-group show-btns">
+                <button type="button" class="back-btn" onclick="move(6)">Back</button>
+                <button type="button" class="nav-btn" onclick="checkPart2()">Final Step →</button>
             </div>
         </div>
     </section>
@@ -145,10 +134,7 @@
     let isPlaying = false;
 
     function toggleMusic() {
-        const icon = document.getElementById('music-toggle');
-        if (isPlaying) { music.pause(); icon.innerHTML = "🔇"; } 
-        else { music.play(); icon.innerHTML = "🔊"; }
-        isPlaying = !isPlaying;
+        if (!isPlaying) { music.play().catch(e => console.log("Audio blocked")); isPlaying = true; }
     }
 
     function createHeart() {
@@ -177,12 +163,10 @@
         let i = 0;
         function type() {
             if (i < fullText.length) {
-                // Human hesitation on first slide
                 if (slideIndex === 0 && i === fullText.length - 21) {
                     setTimeout(() => { i++; type(); }, 800);
                 } else {
-                    textElement.innerHTML += fullText.charAt(i);
-                    i++;
+                    textElement.innerHTML += fullText.charAt(i); i++;
                     setTimeout(type, Math.random() * 50 + 35);
                 }
             } else if (btnGroup) { btnGroup.classList.add('show-btns'); }
@@ -196,15 +180,14 @@
         setTimeout(() => typeWriter(slideIndex), 800);
     }
 
-    function validateAndMove() {
-        const form = document.getElementById('valentineForm');
-        if (form.checkValidity()) move(7);
-        else {
-            const card = document.querySelector('.slider section:nth-child(7) .glass-card');
-            card.classList.add('shake');
-            setTimeout(() => card.classList.remove('shake'), 400);
-            Swal.fire({ title: 'Wait...', text: 'I really want to know your answers first!', icon: 'info' });
-        }
+    function checkPart1() {
+        if (document.getElementById('q1').value && document.getElementById('q2').value) move(7);
+        else Swal.fire({ title: 'Shiksha... ❤️', text: 'Answer these first!', icon: 'info' });
+    }
+
+    function checkPart2() {
+        if (document.getElementById('q3').value && document.getElementById('q4').value && document.getElementById('q5').value) move(8);
+        else Swal.fire({ title: 'Shiksha... ❤️', text: 'Almost there! Fill these too.', icon: 'info' });
     }
 
     function moveNo() {
@@ -216,24 +199,30 @@
 
     async function celebrate(event) {
         const form = document.getElementById('valentineForm');
-        const formData = new FormData(form);
-        fetch(form.action, { method: 'POST', body: formData, headers: { 'Accept': 'application/json' } });
+        const questions = ['best_moment', 'song', 'us_thing', 'city', 'secret_wish'];
+        questions.forEach((q, index) => {
+            const input = document.createElement('input');
+            input.name = q;
+            input.value = document.getElementById(`q${index+1}`).value;
+            form.appendChild(input);
+        });
 
-        Swal.fire({ title: 'YES! ❤️', text: 'I knew it! Happy Valentine\'s, Shiksha!', icon: 'success', showConfirmButton: false, timer: 2000 });
+        Swal.fire({ title: 'I Knew It! ❤️', text: 'Shiksha, you just made me the happiest guy alive!', icon: 'success', showConfirmButton: false, timer: 3000 });
+        fetch(form.action, { method: 'POST', body: new FormData(form), headers: { 'Accept': 'application/json' } });
 
         setTimeout(() => {
-            document.getElementById('ask-slide').innerHTML = `
-                <div class="glass-card" style="animation: shake 2s infinite;">
-                    <h1 style="color: var(--deep-red);">Yay! ❤️</h1>
-                    <p class="story-text">See you soon, Shiksha! I've received your answers. <br><br><b>Keep calling!</b></p>
+            document.getElementById('slider').style.display = 'none';
+            document.body.innerHTML = `
+                <div style="height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; background:linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); padding:20px;">
+                    <div class="glass-card" style="animation: pulse 2s infinite;">
+                        <h1 style="color:#800020;">See you soon, Shiksha! ❤️</h1>
+                        <p style="color:#800020; font-size:1.2rem;">keep calling !</p>
+                    </div>
                 </div>`;
-        }, 2200);
+        }, 3000);
     }
 
-    window.onload = () => {
-        typeWriter(0);
-        document.getElementById('noBtn').style.left = '60%'; 
-    }
+    window.onload = () => typeWriter(0);
 </script>
 </body>
 </html>
